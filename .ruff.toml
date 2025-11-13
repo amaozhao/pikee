@@ -1,0 +1,9 @@
+line-length = 120
+
+[format]
+docstring-code-format = true
+docstring-code-line-length = 100
+skip-magic-trailing-comma = true
+
+[lint]
+extend-safe-fixes = ["E", "F401"]
