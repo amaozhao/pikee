@@ -264,7 +264,7 @@ class Settings(BaseSettings):
             Settings: 配置实例
         """
         logger.info("从本地环境变量加载配置（本地开发模式）")
-        return cls()
+        return cls()  # type: ignore
 
 
 class ConfigManager:

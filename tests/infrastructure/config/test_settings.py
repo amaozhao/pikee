@@ -25,7 +25,7 @@ class TestLocalSettings:
         """测试默认值."""
         with patch.dict(os.environ, {}, clear=True):
             # 使用 _env_file=None 禁用 .env 文件加载
-            settings = LocalSettings(_env_file=None)
+            settings = LocalSettings()
 
             assert settings.apollo_meta_server_address == "http://localhost:8080"
             assert settings.apollo_app_id == "pike-rag"
@@ -48,7 +48,7 @@ class TestLocalSettings:
 
         with patch.dict(os.environ, env_vars, clear=True):
             # 禁用 .env 文件加载，只使用环境变量
-            settings = LocalSettings(_env_file=None)
+            settings = LocalSettings()
 
             assert settings.apollo_meta_server_address == "http://test.apollo.com:8080"
             assert settings.apollo_app_id == "test-app"
@@ -63,7 +63,7 @@ class TestLocalSettings:
 
         with patch.dict(os.environ, env_vars, clear=True):
             # 禁用 .env 文件加载，只使用环境变量
-            settings = LocalSettings(_env_file=None)
+            settings = LocalSettings()
 
             assert settings.apollo_namespaces == ["application", "common", "other"]
 
@@ -74,7 +74,7 @@ class TestSettings:
     def test_settings_required_fields(self) -> None:
         """测试必填字段."""
         with pytest.raises(ValidationError) as exc_info:
-            Settings()
+            Settings()  # type: ignore
 
         errors = exc_info.value.errors()
         required_fields = {error["loc"][0] for error in errors}

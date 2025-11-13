@@ -11,7 +11,10 @@ from langchain_community.document_loaders import (
     CSVLoader,
     JSONLoader,
     TextLoader,
+    UnstructuredExcelLoader,
     UnstructuredFileLoader,
+    UnstructuredPowerPointLoader,
+    UnstructuredWordDocumentLoader,
 )
 from langchain_core.documents import Document as LangChainDocument
 
@@ -69,14 +72,15 @@ class DocumentLoader:
         ".txt": TextLoader,
         ".csv": CSVLoader,
         ".json": JSONLoader,
+        ".xlsx": UnstructuredExcelLoader,
+        ".xls": UnstructuredExcelLoader,
+        ".docx": UnstructuredWordDocumentLoader,
+        ".doc": UnstructuredWordDocumentLoader,
+        ".pptx": UnstructuredPowerPointLoader,
+        ".ppt": UnstructuredPowerPointLoader,
     }
 
-    def __init__(
-        self,
-        mode: str = "elements",
-        strategy: str = "fast",
-        encoding: str = "utf-8",
-    ):
+    def __init__(self, mode: str = "elements", strategy: str = "fast", encoding: str = "utf-8"):
         """初始化文档加载器.
 
         Args:
@@ -93,9 +97,7 @@ class DocumentLoader:
         self.mode = mode
         self.strategy = strategy
         self.encoding = encoding
-        logger.info(
-            f"初始化 DocumentLoader: mode={mode}, strategy={strategy}, encoding={encoding}"
-        )
+        logger.info(f"初始化 DocumentLoader: mode={mode}, strategy={strategy}, encoding={encoding}")
 
     def load(self, file_path: str, title: Optional[str] = None) -> Document:
         """加载文档.
@@ -122,25 +124,18 @@ class DocumentLoader:
         suffix = path.suffix.lower()
         if suffix not in self.SUPPORTED_EXTENSIONS:
             logger.error(f"不支持的文件格式: {suffix}")
-            raise ValueError(
-                f"不支持的文件格式: {suffix}。"
-                f"支持的格式: {', '.join(sorted(self.SUPPORTED_EXTENSIONS))}"
-            )
+            raise ValueError(f"不支持的文件格式: {suffix}。支持的格式: {', '.join(sorted(self.SUPPORTED_EXTENSIONS))}")
 
         logger.info(f"开始加载文档: {file_path} (格式: {suffix})")
 
         try:
             # 加载 LangChain 文档
-            langchain_docs = self._load_langchain_documents(path, suffix)
+            langchain_docs = self._load_documents(path, suffix)
             logger.info(f"加载完成: {len(langchain_docs)} 个文档片段")
 
             # 转换为自定义 Document 对象
             document = self._convert_to_document(langchain_docs, path, title)
-            logger.info(
-                f"文档转换完成: {document.title}, "
-                f"字符数: {document.char_count}, "
-                f"字数: {document.word_count}"
-            )
+            logger.info(f"文档转换完成: {document.title}, 字符数: {document.char_count}, 字数: {document.word_count}")
 
             return document
 
@@ -148,9 +143,7 @@ class DocumentLoader:
             logger.error(f"加载文档失败: {file_path}, 错误: {e}")
             raise
 
-    def _load_langchain_documents(
-        self, path: Path, suffix: str
-    ) -> List[LangChainDocument]:
+    def _load_documents(self, path: Path, suffix: str) -> List[LangChainDocument]:
         """使用 LangChain 加载器加载文档.
 
         Args:
@@ -173,20 +166,13 @@ class DocumentLoader:
             logger.debug(f"使用专用加载器: {loader_class.__name__}")
         else:
             # 复杂格式使用 UnstructuredFileLoader
-            loader = UnstructuredFileLoader(
-                str(path),
-                mode=self.mode,
-                strategy=self.strategy,
-            )
+            loader = UnstructuredFileLoader(str(path), mode=self.mode, strategy=self.strategy)
             logger.debug(f"使用 UnstructuredFileLoader: mode={self.mode}")
 
         return loader.load()
 
     def _convert_to_document(
-        self,
-        langchain_docs: List[LangChainDocument],
-        path: Path,
-        title: Optional[str] = None,
+        self, langchain_docs: List[LangChainDocument], path: Path, title: Optional[str] = None
     ) -> Document:
         """将 LangChain 文档列表转换为单个 Document 对象.
 
@@ -223,12 +209,7 @@ class DocumentLoader:
             file_type=path.suffix[1:],  # 去掉前面的点
             file_size=file_size,
             page_count=page_count,
-            metadata={
-                **metadata,
-                "source": str(path),
-                "file_name": path.name,
-                "document_count": len(langchain_docs),
-            },
+            metadata={**metadata, "source": str(path), "file_name": path.name, "document_count": len(langchain_docs)},
         )
 
         return document
@@ -241,4 +222,3 @@ class DocumentLoader:
             List[str]: 支持的文件格式列表（不含点）
         """
         return sorted([ext[1:] for ext in cls.SUPPORTED_EXTENSIONS])
-
