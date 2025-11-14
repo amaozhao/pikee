@@ -13,6 +13,7 @@ from langchain_community.document_loaders import (
     TextLoader,
     UnstructuredExcelLoader,
     UnstructuredFileLoader,
+    UnstructuredMarkdownLoader,
     UnstructuredPowerPointLoader,
     UnstructuredWordDocumentLoader,
 )
@@ -78,6 +79,7 @@ class DocumentLoader:
         ".doc": UnstructuredWordDocumentLoader,
         ".pptx": UnstructuredPowerPointLoader,
         ".ppt": UnstructuredPowerPointLoader,
+        ".md": UnstructuredMarkdownLoader,
     }
 
     def __init__(self, mode: str = "elements", strategy: str = "fast", encoding: str = "utf-8"):

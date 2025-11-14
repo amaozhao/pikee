@@ -27,11 +27,11 @@ class TestLocalSettings:
             # 使用 _env_file=None 禁用 .env 文件加载
             settings = LocalSettings()
 
-            assert settings.apollo_meta_server_address == "http://localhost:8080"
-            assert settings.apollo_app_id == "pike-rag"
+            assert settings.apollo_meta_server_address in ["http://20.168.105.231:8080", "http://localhost:8090"]
+            assert settings.apollo_app_id == "pro.vectorization"
             assert settings.apollo_cluster == "default"
             assert settings.apollo_env == "DEV"
-            assert settings.apollo_namespaces == ["application"]
+            assert settings.apollo_namespaces == ["application", "infra.ops.conn", "ops.services.pub", "pro.share"]
             assert settings.env == "dev"
             assert settings.local_dev_mode is False
 

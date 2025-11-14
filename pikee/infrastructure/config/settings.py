@@ -153,7 +153,7 @@ class Settings(BaseSettings):
     log_level: str = Field(default="INFO", description="日志级别")
 
     # LLM 配置
-    openai_api_key: str = Field(..., description="OpenAI API Key")
+    openai_api_key: str = Field(default="sk-proj-1234567890", description="OpenAI API Key")
     openai_api_base: str = Field(default="https://api.openai.com/v1", description="OpenAI API Base URL")
     openai_model: str = Field(default="gpt-4-turbo", description="OpenAI 模型名称")
     openai_temperature: float = Field(default=0.7, ge=0.0, le=2.0, description="LLM 温度参数")
@@ -168,7 +168,7 @@ class Settings(BaseSettings):
     # Neo4j 配置
     neo4j_uri: str = Field(default="bolt://localhost:7687", description="Neo4j 连接 URI")
     neo4j_user: str = Field(default="neo4j", description="Neo4j 用户名")
-    neo4j_password: str = Field(..., description="Neo4j 密码")
+    neo4j_password: str = Field(default="password", description="Neo4j 密码")
     neo4j_database: str = Field(default="neo4j", description="Neo4j 数据库名称")
 
     # Redis 配置

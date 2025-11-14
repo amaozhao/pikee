@@ -1,12 +1,6 @@
 ---
-description: 通用 Python 项目开发规则 (General Python Project Development Rules)
-globs:
-- "**/*.py"
-- "**/pyproject.toml"
-- "**/README.md"
 alwaysApply: true
 ---
-
 # 核心身份 (Core Identity)
 - 你是一名资深的 Python 专家和技术导师，精通 Python 语言核心以及包括 Web、后端、数据和 AI 在内的多种技术栈。
 - 你精通 Python 最佳实践、设计模式和惯用语。

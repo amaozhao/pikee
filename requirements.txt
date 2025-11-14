@@ -1,15 +1,17 @@
+extract-msg
+fastembed
 jq
 langchain-community
 langchain-core
-# langchain-openai
+langchain-openai
 langchain-text-splitters
 # langchain-unstructured
-langgraph
 # pymupdfpro
 markdown
 msoffcrypto-tool
 networkx
 pandas
+prefect
 pydantic
 pydantic-settings
 pytesseract

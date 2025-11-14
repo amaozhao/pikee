@@ -7,7 +7,7 @@ from typing import Generator
 import pytest
 
 from pikee.pipeline.models.document import Document
-from pikee.pipeline.services.document_loader import DocumentLoader
+from pikee.pipeline.services.document.loader import DocumentLoader
 
 
 @pytest.fixture
@@ -34,10 +34,7 @@ def sample_txt_file(test_files_dir: Path) -> Path:
         Path: TXT 文件路径
     """
     txt_file = test_files_dir / "sample.txt"
-    txt_file.write_text(
-        "这是一个测试文档。\n\n这是第二段内容。\n包含多行文本。",
-        encoding="utf-8",
-    )
+    txt_file.write_text("这是一个测试文档。\n\n这是第二段内容。\n包含多行文本。", encoding="utf-8")
     return txt_file
 
 
@@ -52,11 +49,7 @@ def sample_json_file(test_files_dir: Path) -> Path:
         Path: JSON 文件路径
     """
     json_file = test_files_dir / "sample.json"
-    data = {
-        "title": "测试文档",
-        "content": "这是 JSON 格式的文档内容",
-        "author": "测试作者",
-    }
+    data = {"title": "测试文档", "content": "这是 JSON 格式的文档内容", "author": "测试作者"}
     json_file.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
     return json_file
 
@@ -72,10 +65,7 @@ def sample_csv_file(test_files_dir: Path) -> Path:
         Path: CSV 文件路径
     """
     csv_file = test_files_dir / "sample.csv"
-    csv_file.write_text(
-        "姓名,年龄,城市\n张三,25,北京\n李四,30,上海\n王五,28,广州",
-        encoding="utf-8",
-    )
+    csv_file.write_text("姓名,年龄,城市\n张三,25,北京\n李四,30,上海\n王五,28,广州", encoding="utf-8")
     return csv_file
 
 
@@ -262,12 +252,7 @@ class TestDocumentModel:
 
     def test_document_creation(self) -> None:
         """测试文档创建."""
-        doc = Document(
-            title="测试文档",
-            content="测试内容",
-            file_path="/path/to/file.txt",
-            file_type="txt",
-        )
+        doc = Document(title="测试文档", content="测试内容", file_path="/path/to/file.txt", file_type="txt")
 
         assert doc.title == "测试文档"
         assert doc.content == "测试内容"
@@ -278,11 +263,7 @@ class TestDocumentModel:
 
     def test_document_auto_title_from_path(self) -> None:
         """测试从文件路径自动生成标题."""
-        doc = Document(
-            content="测试内容",
-            file_path="/path/to/my_document.pdf",
-            file_type="pdf",
-        )
+        doc = Document(content="测试内容", file_path="/path/to/my_document.pdf", file_type="pdf")
 
         assert doc.title == "my_document"
 
@@ -298,12 +279,7 @@ class TestDocumentModel:
 
     def test_document_to_dict(self) -> None:
         """测试转换为字典."""
-        doc = Document(
-            title="测试",
-            content="内容",
-            file_type="txt",
-            metadata={"key": "value"},
-        )
+        doc = Document(title="测试", content="内容", file_type="txt", metadata={"key": "value"})
 
         doc_dict = doc.to_dict()
 
@@ -332,4 +308,3 @@ class TestDocumentModel:
         assert doc.content == "内容"
         assert doc.file_type == "txt"
         assert doc.file_size == 100
-
