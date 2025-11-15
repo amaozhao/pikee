@@ -180,8 +180,8 @@ class Settings(BaseSettings):
     retry_max_wait: int = Field(default=60, gt=0, description="最大等待时间（秒）")
 
     # 文档处理配置
-    chunk_size: int = Field(default=1000, gt=0, description="文档切分大小")
-    chunk_overlap: int = Field(default=200, ge=0, description="文档切分重叠大小")
+    chunk_size: int = Field(default=500, gt=0, description="文档切分大小")
+    chunk_overlap: int = Field(default=100, ge=0, description="文档切分重叠大小")
 
     # 监控配置
     enable_sentry: bool = Field(default=False, description="是否启用 Sentry 错误追踪")
@@ -293,6 +293,7 @@ class ConfigManager:
         Raises:
             RuntimeError: 当配置初始化失败时
         """
+        # TODO: 应该支持从多个命名空间加载配置并合并
         if self._initialized:
             logger.warning("配置管理器已经初始化，跳过重复初始化")
             return self.settings  # type: ignore
@@ -361,6 +362,7 @@ class ConfigManager:
         Returns:
             Settings: 更新后的配置实例
         """
+        # TODO: 应该支持从多个命名空间加载配置并合并
         logger.info("重新加载配置")
 
         if self.local_settings.local_dev_mode:

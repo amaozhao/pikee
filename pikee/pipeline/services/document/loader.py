@@ -168,6 +168,7 @@ class DocumentLoader:
             logger.debug(f"使用专用加载器: {loader_class.__name__}")
         else:
             # 复杂格式使用 UnstructuredFileLoader
+            # 处理pdf文档时，需要考虑同步处理表格和图片，暂时考虑ocr解析图片内容
             loader = UnstructuredFileLoader(str(path), mode=self.mode, strategy=self.strategy)
             logger.debug(f"使用 UnstructuredFileLoader: mode={self.mode}")
 

@@ -49,8 +49,8 @@ class Workflow:
         """文档处理主流程（Prefect Flow）."""
         document = self.load_document(file_path)
         chunks = self.chunk_document(document)
-        print(len(chunks))
-        # atoms = self.extract_atoms(chunks)
+        atoms = self.extract_atoms(chunks)
+        print(len(chunks), len(atoms))
         # success = self.build_vector_store(chunks, atoms)
         return {"success": True, "chunks": len(chunks), "atoms": 0}
         # return {"success": success, "chunks": len(chunks), "atoms": len(atoms)}
@@ -58,4 +58,4 @@ class Workflow:
 
 if __name__ == "__main__":
     workflow = Workflow()
-    workflow.document_processing_pipeline("docs/PIKE-RAG生产级实现方案.md")
+    workflow.document_processing_pipeline("docs/PIKE-RAG生产级实现方案.md")  # type: ignore

@@ -83,7 +83,10 @@ class OpenAIEmbedder(BaseEmbedder):
 
         # 初始化 LangChain OpenAI Embeddings
         self._embeddings = OpenAIEmbeddings(
-            openai_api_key=api_key, model=model, openai_api_base=api_base, chunk_size=batch_size
+            openai_api_key=api_key,  # type: ignore
+            model=model,
+            openai_api_base=api_base,  # type: ignore
+            chunk_size=batch_size,
         )
 
         logger.info(f"OpenAIEmbedder 初始化完成: model={model}, batch_size={batch_size}")

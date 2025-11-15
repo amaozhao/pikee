@@ -6,9 +6,9 @@ langchain-core
 langchain-openai
 langchain-text-splitters
 # langchain-unstructured
-# pymupdfpro
 markdown
 msoffcrypto-tool
+neo4j
 networkx
 pandas
 prefect

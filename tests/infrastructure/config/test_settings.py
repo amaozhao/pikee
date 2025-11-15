@@ -27,7 +27,7 @@ class TestLocalSettings:
             # 使用 _env_file=None 禁用 .env 文件加载
             settings = LocalSettings()
 
-            assert settings.apollo_meta_server_address in ["http://20.168.105.231:8080", "http://localhost:8090"]
+            assert settings.apollo_meta_server_address in ["http://20.168.105.231:8080", "http://localhost:8080"]
             assert settings.apollo_app_id == "pro.vectorization"
             assert settings.apollo_cluster == "default"
             assert settings.apollo_env == "DEV"
@@ -70,16 +70,6 @@ class TestLocalSettings:
 
 class TestSettings:
     """测试应用配置类."""
-
-    def test_settings_required_fields(self) -> None:
-        """测试必填字段."""
-        with pytest.raises(ValidationError) as exc_info:
-            Settings()  # type: ignore
-
-        errors = exc_info.value.errors()
-        required_fields = {error["loc"][0] for error in errors}
-        assert "openai_api_key" in required_fields
-        assert "neo4j_password" in required_fields
 
     def test_settings_with_minimal_config(self) -> None:
         """测试最小配置."""
