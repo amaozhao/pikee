@@ -2,6 +2,7 @@ from typing import List
 
 from prefect import flow, task
 from prefect.cache_policies import NO_CACHE
+from prefect_dask.task_runners import DaskTaskRunner
 
 from pikee.infrastructure.config.settings import get_settings
 from pikee.infrastructure.database import get_qdrant_client
@@ -44,7 +45,10 @@ class Workflow:
         builder = VectorDatabaseBuilder(settings, qdrant_client, embedder)
         return builder.build_all(chunks, atoms)
 
-    @flow(name="Document Processing Pipeline", retries=1)
+    @flow(
+        name="Document Processing Pipeline",
+        task_runner=DaskTaskRunner(address="tcp://192.168.1.5:8786"),  # type: ignore
+    )
     def document_processing_pipeline(self, file_path: str):
         """文档处理主流程（Prefect Flow）."""
         document = self.load_document(file_path)
